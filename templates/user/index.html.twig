@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Diminutif</th>
+                <th>Email</th>
+                <th>Rang</th>
+                <th>Date de création</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.screenname }}</td>
+                <td>{{ user.email }}</td>
+                {% if user.roles[0] == 'ROLE_USER' %}
+                    <td>Employer</td>
+                {% elseif user.roles[0] == 'ROLE_MANAGER' %}
+                    <td>Manager</td>
+                {% endif %}
+                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('user.show', {'id': user.id}) }}">Voir</a>
+                    <a href="{{ path('user.edit', {'id': user.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">Aucun résultat trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user.new') }}">Ajouter un utilisateur</a>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>Utilisateur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Diminutif</th>
+                <td>{{ user.screenname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Rang</th>
+                {% if user.roles[0] == 'ROLE_USER' %}
+                    <td>Employer</td>
+                {% elseif user.roles[0] == 'ROLE_MANAGER' %}
+                    <td>Manager</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Date de création</th>
+                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('user.index') }}">Retour à la liste</a>
+
+    <a href="{{ path('user.edit', {'id': user.id}) }}">Modifier</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
