@@ -1,4 +1,43 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {# Firstname #}
+    <div>
+        {{ form_label(form.firstname) }}
+        {{ form_widget(form.firstname) }}
+        {{ form_errors(form.firstname) }}
+        {{ form_help(form.firstname) }}
+    </div>
+    {# End firstname #}
+    {# Lastname #}
+    <div>
+        {{ form_label(form.lastname) }}
+        {{ form_widget(form.lastname) }}
+        {{ form_errors(form.lastname) }}
+        {{ form_help(form.lastname) }}
+    </div>
+    {# End lastname #}
+    {# Email #}
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+        {{ form_errors(form.email) }}
+        {{ form_help(form.email) }}
+    </div>
+    {# End email #}
+    {# Roles #}
+    <div>
+        {{ form_label(form.roles) }}
+        {{ form_widget(form.roles) }}
+        {{ form_errors(form.roles) }}
+        {{ form_help(form.roles) }}
+    </div>
+    {# End roles #}
+    {# Password #}
+    <div>
+        {{ form_widget(form.password) }}
+        {{ form_errors(form.password) }}
+        {{ form_help(form.password) }}
+    </div>
+    {# End password #}
+    
+    <button class="btn">{{ button_label|default('Valider') }}</button>
 {{ form_end(form) }}

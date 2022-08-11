@@ -31,6 +31,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function add(User $entity, bool $flush = false): void
     {
         $entity->setPassword($this->passwordHasher->hashPassword($entity, $entity->getPassword()));
+        $entity->setScreenname($entity->getFirstname() . '.' . strtoupper(substr($entity->getLastname(), 0, 1)));
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {

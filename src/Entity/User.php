@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -17,7 +17,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180, unique: true),
+    Assert\NotBlank([], "Veuillez saisir une adresse email"),
+    Assert\Email([], "L'adresse email '{{ value }}' n'est pas valide."),
+    Assert\Regex(
+        pattern: "/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/",
+        match: true,
+        message: "Adresse email non valide.")]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -26,13 +32,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column,
+    Assert\NotBlank([], "Veuillez saisir un mot de passe"),
+    Assert\Regex(
+        pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i",
+        match: true,
+        message: "le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial")]
     private ?string $password = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(length: 40),
+    Assert\NotBlank([], "Veuillez saisir un Prénom"),
+    Assert\Length(
+    min: 3,
+    max: 40,
+    minMessage: "Le nom doit contenir au minimum {{ limit }} caractères",
+    maxMessage: "Le nom doit contenir maximum {{ limit }} caractères"),
+    Assert\Regex(
+        pattern: "/^[a-z-\s]{3,40}$/i",
+        match: true,
+        message: "Le prénom ne peut contenir que des lettres, des tirets et des espaces")]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 90)]
+    #[ORM\Column(length: 90),
+    Assert\NotBlank([], "Veuillez saisir un nom"),
+    Assert\Length(
+    min: 3,
+    max: 90,
+    minMessage: "Le nom doit contenir au minimum {{ limit }} caractères",
+    maxMessage: "Le nom doit contenir maximum {{ limit }} caractères"),
+
+    Assert\Regex(
+        pattern: "/^[a-z-\s]{3,90}$/i",
+        match: true,
+        message: "Le nom ne peut contenir que des lettres, des tirets et des espaces")]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 91)]

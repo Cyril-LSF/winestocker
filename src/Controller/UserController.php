@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/user')]
 class UserController extends AbstractController
 {
-    private $accessControlService;
     private $userRepository;
 
     public function __construct(UserRepository $userRepository)
@@ -60,7 +59,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->add($user, true);
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', "L'utilisateur a bien été enregistré");
+            return $this->redirectToRoute('user.index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/new.html.twig', [
@@ -109,7 +109,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->add($user, true);
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', "Les informations de l'utilisateur ont bien été modifiées");
+            return $this->redirectToRoute('user.show', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/edit.html.twig', [
@@ -137,6 +138,7 @@ class UserController extends AbstractController
             $this->userRepository->remove($user, true);
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('success', "l'utilisateur a bien été supprimé");
+        return $this->redirectToRoute('user.index', [], Response::HTTP_SEE_OTHER);
     }
 }
