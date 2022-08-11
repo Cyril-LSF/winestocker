@@ -38,9 +38,13 @@
         </tbody>
     </table>
 
-    <a href="{{ path('user.index') }}">Retour à la liste</a>
-
     <a href="{{ path('user.edit', {'id': user.id}) }}">Modifier</a>
 
-    {{ include('user/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_MANAGER') %}
+        <a href="{{ path('user.index') }}">Retour à la liste</a>
+        {{ include('user/_delete_form.html.twig') }}
+    {% else %}
+        <a href="{{ path('box.index') }}">Retour</a>
+    {% endif %}
+
 {% endblock %}

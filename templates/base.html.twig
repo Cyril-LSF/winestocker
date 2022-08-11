@@ -14,6 +14,7 @@
         {% endblock %}
     </head>
     <body>
+
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash-{{ label }}">
@@ -21,6 +22,27 @@
                 </div>
             {% endfor %}
         {% endfor %}
-        {% block body %}{% endblock %}
+
+        {% if app.user and is_granted('ROLE_MANAGER') %}
+            <div>
+                <a href="{{ path('box.index') }}">accueil</a>
+                <a href="{{ path('user.index') }}">Liste des utilisateurs</a>
+                <a href="{{ path('user.new') }}">Ajouter un utilisateurs</a>
+                <a href="{{ path('user.show', {id: app.user.id}) }}">Mes informations</a>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+        {% elseif app.user %}
+            <div>
+                <a href="{{ path('box.index') }}">accueil</a>
+                <a href="{{ path('user.show', {id: app.user.id}) }}">Mes informations</a>
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+        {% endif %}
+
+        <div>
+        {% block body %}
+        {% endblock %}
+        </div>
+        
     </body>
 </html>

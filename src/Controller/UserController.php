@@ -5,23 +5,37 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
+    private $accessControlService;
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Return the users list
      * @return Response
      */
     #[Route('/', name: 'user.index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
+        //Acces control
+        if(!$this->isGranted('ROLE_MANAGER')){
+            $this->addFlash('error', "Tu n'as pas l'autorisation d'accéder à cette page");
+            return $this->redirectToRoute('box.index');
+        }
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $this->userRepository->findAll(),
         ]);
     }
 
@@ -31,14 +45,20 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/new', name: 'user.new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository): Response
+    public function new(Request $request): Response
     {
+        //Acces control
+        if(!$this->isGranted('ROLE_MANAGER')){
+            $this->addFlash('error', "Tu n'as pas l'autorisation d'accéder à cette page");
+            return $this->redirectToRoute('box.index');
+        }
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->add($user, true);
+            $this->userRepository->add($user, true);
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -57,6 +77,12 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'user.show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        //Acces control
+        if(!$this->isGranted('ROLE_MANAGER') && $user->getId() != $this->getUser()->getId()){
+            $this->addFlash('error', "Tu n'as pas l'autorisation d'accéder à cette page");
+            return $this->redirectToRoute('box.index');
+        }
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -69,13 +95,19 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/edit', name: 'user.edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user): Response
     {
+        //Acces control
+        if(!$this->isGranted('ROLE_MANAGER') && $user->getId() != $this->getUser()->getId()){
+            $this->addFlash('error', "Tu n'as pas l'autorisation d'accéder à cette page");
+            return $this->redirectToRoute('box.index');
+        }
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->add($user, true);
+            $this->userRepository->add($user, true);
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -93,10 +125,16 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/{id}', name: 'user.delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user): Response
     {
+        //Acces control
+        if(!$this->isGranted('ROLE_MANAGER')){
+            $this->addFlash('error', "Tu n'as pas l'autorisation d'accéder à cette page");
+            return $this->redirectToRoute('box.index');
+        }
+        
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
+            $this->userRepository->remove($user, true);
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

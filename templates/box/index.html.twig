@@ -10,10 +10,7 @@
 
 <div class="example-wrapper">
     <h1>Hello {{ app.user.firstname }}!</h1>
-    {% if app.user.roles[0] == 'ROLE_USER' %}
-        <p>Tu es employer</p>
-    {% elseif app.user.roles[0] == 'ROLE_MANAGER' %}
-        <p>Tu es manager</p>
-    {% endif %}
+    
+    <p>Tu es {{ is_granted('ROLE_MANAGER') ? 'Manager' : 'Employer' }}</p>
 </div>
 {% endblock %}
