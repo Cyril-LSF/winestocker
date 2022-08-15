@@ -3,12 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -28,9 +28,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function add(User $entity, bool $flush = false): void
+    public function edit(User $entity, bool $flush = false, string $plainPassword = null): void
     {
-        $entity->setPassword($this->passwordHasher->hashPassword($entity, $entity->getPassword()));
+        if($plainPassword){
+            $entity->setPassword($this->passwordHasher->hashPassword($entity, $plainPassword));
+        }
         $entity->setScreenname($entity->getFirstname() . '.' . strtoupper(substr($entity->getLastname(), 0, 1)));
         $this->getEntityManager()->persist($entity);
 

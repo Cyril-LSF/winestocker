@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -31,32 +31,6 @@ class UserController extends AbstractController
     {
         return $this->render('user/index.html.twig', [
             'users' => $this->userRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * Add new user in database
-     * @param Request $request
-     * @return Response
-     */
-    #[Route('/new', name: 'user.new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_MANAGER', statusCode: 403, message: "Acces non autorisé")]
-    public function new(Request $request): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->userRepository->add($user, true);
-
-            $this->addFlash('success', "L'utilisateur a bien été enregistré");
-            return $this->redirectToRoute('user.index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
         ]);
     }
 
@@ -98,7 +72,9 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userRepository->add($user, true);
+
+            $plainPassword =  $form->get('plainPassword')->getData();
+            $this->userRepository->edit($user, true, $plainPassword);
 
             $this->addFlash('success', "Les informations de l'utilisateur ont bien été modifiées");
             return $this->redirectToRoute('user.show', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
