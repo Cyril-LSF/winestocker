@@ -64,7 +64,7 @@ class RegistrationFormType extends AbstractType
                     'label' => "Mot de passe *",
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a password',
+                            'message' => 'Veuillez saisir un mot de passe',
                         ]),
                         new Regex([
                             'pattern' => "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i",
