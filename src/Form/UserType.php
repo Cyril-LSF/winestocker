@@ -51,7 +51,7 @@ class UserType extends AbstractType
                     'Employer' => "ROLE_USER",
                     'Manager' => "ROLE_MANAGER",
                 ],
-                'required' => true
+                'required' => true,
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,

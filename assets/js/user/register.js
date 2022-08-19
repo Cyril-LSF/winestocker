@@ -10,21 +10,22 @@ document.forms['registration_form'].addEventListener('submit', function(e){
         confirmPassword: 'Les mots de passe ne correspondent pas',
     };
 
-    const setRedColor = (element) => {
-        element.style.color = 'red';
-    };
-
-    const setErrorField = (className, errorTarget) => {
+    const setErrorField = (formDivId, errorTarget) => {
         e.preventDefault();
-        let domSelector = document.querySelector(className);
-        error = errorMessage[errorTarget];
-        domSelector.innerHTML = error;
-        setRedColor(domSelector);
-    };
+        if(!document.querySelector("."+formDivId)){
+            let newElement = document.createElement("p");
+            newElement.classList.add(formDivId, "text-danger");
+            newElement.innerHTML = errorMessage[errorTarget];
+            let domSelector = document.getElementById(formDivId);
+            domSelector.append(newElement);
+        }
+    }
 
-    const removeErrorField = (className) => {
-        let domSelector = document.querySelector(className);
-        domSelector.innerHTML = "";
+    const removeErrorField = (classname) => {
+        let domSelector = document.querySelector(classname);
+        if(domSelector){
+            domSelector.remove();
+        }
     }
 
     for(let i = 0; i < inputs.length; i++){
@@ -39,33 +40,33 @@ document.forms['registration_form'].addEventListener('submit', function(e){
     }
 
     if(!inputs['registration_form[firstname]'].value.match(/^[a-z-\s]{3,40}$/i)){
-        setErrorField('.firstname-error', 'firstname');
+        setErrorField('firstname', 'firstname');
     } else {
-        removeErrorField('.firstname-error');
+        removeErrorField('.firstname');
     }
 
     if(!inputs['registration_form[lastname]'].value.match(/^[a-z-\s]{3,90}$/i)){
-        setErrorField('.lastname-error', 'lastname');
+        setErrorField('lastname', 'lastname');
     } else {
-        removeErrorField('.lastname-error');
+        removeErrorField('.lastname');
     }
 
     if(!inputs['registration_form[email]'].value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
-        setErrorField('.email-error', 'email');
+        setErrorField('email', 'email');
     } else {
-        removeErrorField('.email-error');
+        removeErrorField('.email');
     }
 
     if(!inputs['registration_form[plainPassword][first]'].value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i)){
-        setErrorField('.password-error', 'password');
+        setErrorField('password', 'password');
     } else {
-        removeErrorField('.password-error');
+        removeErrorField('.password');
     }
 
     if(inputs['registration_form[plainPassword][second]'].value != inputs['registration_form[plainPassword][first]'].value){
-        setErrorField('.confirm-password-error', 'confirmPassword');
+        setErrorField('confirm-password', 'confirmPassword');
     } else {
-        removeErrorField('.confirm-password-error');
+        removeErrorField('.confirm-password');
     }
 
 })

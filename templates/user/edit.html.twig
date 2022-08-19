@@ -14,3 +14,8 @@
     <a href="{{ path('user.show', {id : app.user.id}) }}">Retour</a>
     {% endif %}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('edit') }}
+{% endblock %}

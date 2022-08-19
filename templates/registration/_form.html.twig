@@ -1,32 +1,29 @@
 {{ form_start(registrationForm) }}
     {# Firstname #}
-    <div>
+    <div id="firstname">
         {{ form_label(registrationForm.firstname) }}
         {{ form_widget(registrationForm.firstname) }}
         {% for errorItem in registrationForm.firstname.vars.errors %}
-            <div class="firstname-error">{{ errorItem.message }}</div>
+            <div class="firstname-error text-danger">{{ errorItem.message }}</div>
         {% endfor %}
-        <p class="firstname-error"></p>
     </div>
     {# End firstname #}
     {# Lastname #}
-    <div>
+    <div id="lastname">
         {{ form_label(registrationForm.lastname) }}
         {{ form_widget(registrationForm.lastname) }}
         {% for errorItem in registrationForm.lastname.vars.errors %}
-            <div class="lastname-error">{{ errorItem.message }}</div>
+            <div class="lastname-error text-danger">{{ errorItem.message }}</div>
         {% endfor %}
-        <p class="lastname-error"></p>
     </div>
     {# End lastname #}
     {# Email #}
-    <div>
+    <div id="email">
         {{ form_label(registrationForm.email) }}
         {{ form_widget(registrationForm.email) }}
         {% for errorItem in registrationForm.email.vars.errors %}
             <div class="email-error text-danger">{{ errorItem.message }}</div>
-        {% endfor %} 
-        <p class="email-error"></p>
+        {% endfor %}
     </div>
     {# End email #}
     {# Roles #}
@@ -38,24 +35,22 @@
     {# End roles #}
 
     {# Password #}
-    <div>
+    <div id="password">
         {{ form_label(registrationForm.plainPassword.first) }}
         {{ form_widget(registrationForm.plainPassword.first) }}
         {% for errorItem in registrationForm.plainPassword.first.vars.errors %}
             <div class="password-error text-danger">{{ errorItem.message }}</div>
         {% endfor %}
-        <p class="password-error"></p>
     </div>
     {# End password #}
 
     {# Confirm password #}
-    <div>
+    <div id="confirm-password">
         {{ form_label(registrationForm.plainPassword.second) }}
         {{ form_widget(registrationForm.plainPassword.second) }}
         {% for errorItem in registrationForm.plainPassword.second.vars.errors %}
             <div class="password-error text-danger">{{ errorItem.message }}</div>
         {% endfor %}
-        <p class="confirm-password-error"></p>
     </div>
     {# End confirm password #}
     
