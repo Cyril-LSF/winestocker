@@ -43,6 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picturesFile = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +162,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(): self
     {
         $this->createdAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getPicturesFile(): ?string
+    {
+        return $this->picturesFile;
+    }
+
+    public function setPicturesFile(?string $picturesFile): self
+    {
+        $this->picturesFile = $picturesFile;
 
         return $this;
     }

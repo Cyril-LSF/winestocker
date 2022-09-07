@@ -14,13 +14,15 @@ class UserUnitTest extends TestCase
             ->setPassword('password')
             ->setFirstname('firstname')
             ->setLastname('lastname')
-            ->setScreenname('firstname.L');
+            ->setScreenname('firstname.L')
+            ->setPicturesFile('true.png');
 
             $this->assertTrue($user->getEmail() === 'true@test.fr');
             $this->assertTrue($user->getPassword() === 'password');
             $this->assertTrue($user->getFirstname() === 'firstname');
             $this->assertTrue($user->getLastname() === 'lastname');
             $this->assertTrue($user->getScreenname() === 'firstname.L');
+            $this->assertTrue($user->getPicturesFile() === 'true.png');
         
     }
 
@@ -30,13 +32,15 @@ class UserUnitTest extends TestCase
             ->setPassword('password')
             ->setFirstname('firstname')
             ->setLastname('lastname')
-            ->setScreenname('firstname.L');
+            ->setScreenname('firstname.L')
+            ->setPicturesFile('true.png');
 
         $this->assertFalse($user->getEmail() === 'false@test.fr');
         $this->assertFalse($user->getPassword() === 'false');
         $this->assertFalse($user->getFirstname() === 'false');
         $this->assertFalse($user->getLastname() === 'false');
         $this->assertFalse($user->getScreenname() === 'false');
+        $this->assertFalse($user->getPicturesFile() === 'false.png');
     }
 
     public function testIsEmpty(){
@@ -47,5 +51,6 @@ class UserUnitTest extends TestCase
         $this->assertEmpty($user->getFirstname());
         $this->assertEmpty($user->getLastname());
         $this->assertEmpty($user->getScreenname());
+        $this->assertEmpty($user->getPicturesFile());
     }
 }

@@ -16,8 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationFormType extends AbstractType
 {
@@ -121,6 +123,24 @@ class RegistrationFormType extends AbstractType
                         'pattern' => "/^[a-z-\s]{3,90}$/i",
                         'match' => true,
                         'message' => "Le nom ne peut contenir que des lettres, des tirets et des espaces",
+                    ])
+                ]
+            ])
+            ->add('picturesFile', FileType::class, [
+                'label' => "Photo de profil",
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => "5000000",
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/JPG',
+                            'image/png',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => "Le fichier doit être de type {{ types }}",
+                        'maxSizeMessage' => "La taille maximale du fichier doit être de {{ limit }} Mo",
                     ])
                 ]
             ])

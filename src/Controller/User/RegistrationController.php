@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class RegistrationController extends AbstractController
      */
     #[Route('/register', name: 'user.register')]
     #[IsGranted('ROLE_MANAGER', statusCode: 403, message: "Acces non autorisé")]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -39,6 +40,12 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            $pictureFile = $form->get('picturesFile')->getData();
+            if($pictureFile){
+                $picturesFileName = $fileUploader->upload($pictureFile);
+                $user->setPicturesFile($picturesFileName);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();

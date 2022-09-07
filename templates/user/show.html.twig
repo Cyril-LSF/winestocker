@@ -35,8 +35,15 @@
                 <th>Date de création</th>
                 <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            {% if user.picturesFile %}
+            <tr>
+                <th>Photo de profil</th>
+                <td><img src="{{ asset('uploads/pictures/' ~ user.picturesFile) }}" alt="Photo de profil" title="{{ user.picturesFile }}" width="100px" height="100px"></td>
+            </tr>
+            {% endif %}
         </tbody>
     </table>
+
 
     <a href="{{ path('user.edit', {'id': user.id}) }}">Modifier</a>
 
