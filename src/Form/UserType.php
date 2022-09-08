@@ -6,16 +6,18 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
@@ -116,6 +118,24 @@ class UserType extends AbstractType
                         'pattern' => "/^[a-z-\s]{3,90}$/i",
                         'match' => true,
                         'message' => "Le nom ne peut contenir que des lettres, des tirets et des espaces",
+                    ])
+                ]
+            ])
+            ->add('picturesFile', FileType::class, [
+                'label' => "Photo de profil",
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => "5000000",
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/JPG',
+                            'image/png',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => "Le fichier doit être de type {{ types }}",
+                        'maxSizeMessage' => "La taille maximale du fichier doit être de {{ limit }} Mo",
                     ])
                 ]
             ])

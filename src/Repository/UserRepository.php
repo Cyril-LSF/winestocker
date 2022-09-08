@@ -28,10 +28,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function edit(User $entity, bool $flush = false, string $plainPassword = null): void
+    public function edit(User $entity, bool $flush = false, string $plainPassword = null, string $picturesFileName = null): void
     {
         if($plainPassword){
             $entity->setPassword($this->passwordHasher->hashPassword($entity, $plainPassword));
+        }
+        if($picturesFileName){
+            $entity->setPicturesFile($picturesFileName);
         }
         $entity->setScreenname($entity->getFirstname() . '.' . strtoupper(substr($entity->getLastname(), 0, 1)));
         $this->getEntityManager()->persist($entity);

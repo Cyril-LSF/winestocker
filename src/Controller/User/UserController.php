@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,7 +61,7 @@ class UserController extends AbstractController
      * @return Response
      */
     #[Route('/{id}/edit', name: 'user.edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, User $user, FileUploader $fileUploader): Response
     {
         //Acces control
         if(!$this->isGranted('ROLE_MANAGER') && $user->getId() != $this->getUser()->getId()){
@@ -74,7 +75,12 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $plainPassword =  $form->get('plainPassword')->getData();
-            $this->userRepository->edit($user, true, $plainPassword);
+            $pictureFile = $form->get('picturesFile')->getData();
+            if($pictureFile){
+                $picturesFileName = $fileUploader->upload($pictureFile);
+            }
+            
+            $this->userRepository->edit($user, true, $plainPassword, $picturesFileName);
 
             $this->addFlash('success', "Les informations de l'utilisateur ont bien été modifiées");
             return $this->redirectToRoute('user.show', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);

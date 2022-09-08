@@ -26,6 +26,15 @@
         {% endfor %}
     </div>
     {# End email #}
+    {# PictureFile #}
+    <div id="picturesFile">
+        {{ form_label(form.picturesFile) }}
+        {{ form_widget(form.picturesFile) }}
+        {% for errorItem in form.picturesFile.vars.errors %}
+            <div class="picturesFile-error text-danger">{{ errorItem.message }}</div>
+        {% endfor %}
+    </div>
+    {# End picturesFile #}
     {# Roles #}
     <div>
         {{ form_label(form.roles) }}
